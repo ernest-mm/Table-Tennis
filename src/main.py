@@ -2,6 +2,7 @@ import pygame
 import sys
 from scripts.display_resolution import Display_resolution
 from scripts.constants import *
+from scripts.entities import Ball
 
 class Game:
     def __init__(self):
@@ -17,12 +18,15 @@ class Game:
 
         self.__game_surface = pygame.Surface(self.__resolution.get_screen_size())
 
+        self.__ball = Ball(self.__game_surface, self.__resolution.get_screen_width(), self.__resolution.get_screen_height())
+
     def main_menu(self):
         pass
 
     def run(self):
 
         while True:
+            self.__ball.draw()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
