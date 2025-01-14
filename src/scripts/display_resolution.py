@@ -149,7 +149,17 @@ class Display_resolution:
             return None
         else:
             self.__get_screen_infos()
+
+    def __run_fill_screen_infos(method):
+        """
+        A decorator that will call __fill_screen_infos before some methods that need it to be called to work.
+        """
+        def wrapper(self, *args, **kwargs): 
+            self.__fill_screen_infos()
+            return method(self, *args, **kwargs)
+        return wrapper
     
+    @__run_fill_screen_infos
     def scaled_down(self, value: int) -> int:
         """
         Takes a value (x, y, width, or height) in the developer's resolution and returns a value converted to the user's supported resolution.
@@ -176,61 +186,51 @@ class Display_resolution:
 
         return dev_res
     
+    @__run_fill_screen_infos
     def get_screen_size(self) -> tuple[int, int]:
         """
         Returns the user's width and height.
         """
 
-        # Filling self.__screen_infos
-        self.__fill_screen_infos()
-
         size = self.__screen_infos["size"]
 
         return size
-
+    
+    @__run_fill_screen_infos
     def get_screen_width(self) -> int:
         """
         Returns the user's screen width.
         """
 
-        # Filling self.__screen_infos
-        self.__fill_screen_infos()
-
         width = self.__screen_infos["width"]
 
         return width
-
+    
+    @__run_fill_screen_infos
     def get_screen_height(self) -> int:
         """
         Returns the user's screen height.
         """
 
-        # Filling self.__screen_infos
-        self.__fill_screen_infos()
-
         height = self.__screen_infos["height"]
 
         return height
-
+    
+    @__run_fill_screen_infos
     def get_screen_resolution(self) -> str:
         """
         Returns the name of the user's screen resolution
         """
 
-        # Filling self.__screen_infos
-        self.__fill_screen_infos()
-
         res = self.__screen_infos["resolution"]
 
         return res
-
+    
+    @__run_fill_screen_infos
     def get_screen_scale_factor(self) -> Fraction:
         """
         Returns the scale factor of the user's screen resolution, in relation to the development resolution.
         """
-
-        # Filling self.__screen_infos
-        self.__fill_screen_infos()
 
         scale = self.__screen_infos["scale"]
 
