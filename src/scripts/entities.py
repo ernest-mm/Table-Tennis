@@ -4,16 +4,16 @@ from scripts.display_resolution import Display_resolution
 
 def paddle(display_resolution_object: Display_resolution, left_paddle: bool = True) -> dict:
     """
-    Returns a dictionary containing the paddle's width, height, x and y coordinates and its rect object.
+    Returns a dictionary containing the paddle's width, height, x and y coordinates.
     """
     resolution = display_resolution_object
     width: int = resolution.scaled_down(PADDLE_WIDTH)
-    height: int = resolution.get_screen_height()//5
+    height: int = resolution.scaled_down(PADDLE_HEIGHT)
 
     if left_paddle:
-        x_position: int = resolution.scaled_down(DISTANCE_FROM_HEIGHT)
+        x_position: int = resolution.scaled_down(MIN_DISTANCE_FROM_LEFT_OR_RIGHT)
     else:
-        x_position: int = resolution.get_screen_width() - resolution.scaled_down(DISTANCE_FROM_HEIGHT) - width
+        x_position: int = resolution.get_screen_width() - resolution.scaled_down(MIN_DISTANCE_FROM_LEFT_OR_RIGHT) - width
 
     # The paddle height is 1/5 of the screen height, so the y position will be in the middle, at the 3rd position
     y_position: int = height * 2
@@ -25,10 +25,14 @@ def paddle(display_resolution_object: Display_resolution, left_paddle: bool = Tr
         "height": height,
         "x": x_position,
         "y": y_position,
-        "rect": rect
     }
 
     return paddle_infos
+
+def draw_paddle(surface: pygame.Surface, color: tuple, paddle: dict) -> None:
+   
+    paddle["rect"] = pygame.Rect(paddle["x"], paddle["y"], paddle["width"], paddle["height"])
+    pygame.draw.rect(surface, color, paddle["rect"])
 
 def ball(display_resolution_object: Display_resolution) -> dict:
     """
@@ -46,3 +50,6 @@ def ball(display_resolution_object: Display_resolution) -> dict:
     }
 
     return ball_infos
+
+if __name__ == "__main__":
+    print("This script is only meant to be imported")
