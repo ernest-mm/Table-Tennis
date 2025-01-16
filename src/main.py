@@ -2,7 +2,7 @@ import pygame
 import sys
 from scripts.display_resolution import Display_resolution
 from scripts.constants import *
-from scripts.entities import Ball, paddle
+from scripts.entities import paddle, ball
 
 class Game:
     def __init__(self):
@@ -25,6 +25,9 @@ class Game:
         self.__left_paddle = paddle(self.__res)
         self.__right_paddle = paddle(self.__res, False)
 
+        # Creating the ball
+        self.__ball = ball(self.__res)
+
     def main_menu(self):
         pass
 
@@ -32,6 +35,7 @@ class Game:
         while True:
             pygame.draw.rect(self.__game_surface, WHITE, self.__left_paddle["rect"])
             pygame.draw.rect(self.__game_surface, WHITE, self.__right_paddle["rect"])
+            pygame.draw.circle(self.__game_surface, WHITE, (self.__ball["x"], self.__ball["y"]), self.__ball["radius"])
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()

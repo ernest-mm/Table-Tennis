@@ -30,13 +30,19 @@ def paddle(display_resolution_object: Display_resolution, left_paddle: bool = Tr
 
     return paddle_infos
 
-class Ball:
-    def __init__(self, surface: pygame.Surface, screen_width: int, screen_height: int):
-        self.__surface = surface
-        self.__resolution = Display_resolution()
-        self.__x_position: int = screen_width//2
-        self.__y_position: int = screen_height//2
-        self.__radius : int = self.__resolution.scaled_down(BALL_RADIUS)
-    
-    def draw(self):
-        pygame.draw.circle(self.__surface, WHITE, (self.__x_position, self.__y_position), self.__radius)
+def ball(display_resolution_object: Display_resolution) -> dict:
+    """
+    Returns a dictionary containing the ball's x and y coordinates and its radius.
+    """
+    resolution = display_resolution_object
+    x_position: int = resolution.get_screen_width() //2
+    y_position: int = resolution.get_screen_height() //2
+    radius : int = resolution.scaled_down(BALL_RADIUS)
+
+    ball_infos = {
+        "x": x_position,
+        "y": y_position,
+        "radius": radius
+    }
+
+    return ball_infos
