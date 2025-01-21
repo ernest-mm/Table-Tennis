@@ -8,7 +8,7 @@ BALL_RADIUS: int = 36
 PADDLE_WIDTH: int = BALL_RADIUS * 2
 PADDLE_HEIGHT: int = 2160 // 5
 
-PADDLE_SPEED: int = 18
+PADDLE_VELOCITY: int = 18
 
 # Minimum distance of the paddle from the left or right of the screen in 4k
 MIN_DISTANCE_FROM_LEFT_OR_RIGHT: int = BALL_RADIUS//2

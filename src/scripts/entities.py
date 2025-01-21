@@ -4,7 +4,7 @@ from scripts.display_resolution import Display_resolution
 
 def paddle(display_resolution_object: Display_resolution, left_paddle: bool = True) -> dict:
     """
-    Returns a dictionary containing the paddle's width, height, x and y coordinates.
+    Returns a dictionary containing the paddle's width, height, x and y coordinates and velocity.
     """
     resolution = display_resolution_object
     width: int = resolution.scaled_down(PADDLE_WIDTH)
@@ -18,13 +18,14 @@ def paddle(display_resolution_object: Display_resolution, left_paddle: bool = Tr
     # The paddle height is 1/5 of the screen height, so the y position will be in the middle, at the 3rd position
     y_position: int = height * 2
 
-    rect: pygame.Rect = pygame.Rect(x_position, y_position, width, height)
+    velocity = resolution.scaled_down(PADDLE_VELOCITY)
 
     paddle_infos = {
         "width": width,
         "height": height,
         "x": x_position,
         "y": y_position,
+        "velocity": velocity
     }
 
     return paddle_infos

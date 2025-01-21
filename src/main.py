@@ -31,33 +31,47 @@ class Game:
     def main_menu(self):
         pass
 
-    def __move_left_paddle(self):
+    def __paddle_inside_screen(self, y_coordinate: int, velocity: int, up_direction: bool = True) -> bool:
+        """
+        Returns True if for the next movement, the paddle will be inside the screen. 
+        """
+
+        if up_direction:
+            if (y_coordinate - velocity) > self.__res.scaled_down(MIN_DISTANCE_FROM_TOP):
+                return True
+        else:
+            if y_coordinate + velocity < self.__res.scaled_down(MIN_DISTANCE_FROM_BOTTOM):
+                return True
+            
+        return False
+
+    def __paddles_movements(self) -> None:
+        """
+        Move the paddles up or down depending on which keys have been pressed.
+        """
+
+        # Getting the keys that have been pressed
         keys = pygame.key.get_pressed()
 
-        up_key = pygame.K_w
-        down_key = pygame.K_s
+        # Setting up the keys for the paddles' up and down movements
 
-        # Checking if he's not trying to go outside of the top screen
-        if keys[up_key] and self.__left_paddle["y"] > self.__res.scaled_down(MIN_DISTANCE_FROM_TOP):
-            self.__left_paddle["y"] -= self.__res.scaled_down(PADDLE_SPEED)
+        left_paddle_up = pygame.K_w
+        left_paddle_down = pygame.K_s
 
-        # Checking if he's not trying to go outside of the bottom screen
-        if keys[down_key] and self.__left_paddle["y"] < self.__res.scaled_down(MIN_DISTANCE_FROM_BOTTOM): 
-            self.__left_paddle["y"] += self.__res.scaled_down(PADDLE_SPEED)
+        right_paddle_up = pygame.K_UP
+        right_paddle_down = pygame.K_DOWN
 
-    def __move_right_paddle(self):
-        keys = pygame.key.get_pressed()
+        # Moving the paddles only if they are inside the screen
 
-        up_key = pygame.K_UP
-        down_key = pygame.K_DOWN
+        if keys[left_paddle_up] and self.__paddle_inside_screen(self.__left_paddle["y"], self.__left_paddle["velocity"]):
+            self.__left_paddle["y"] -= self.__left_paddle["velocity"]
+        if keys[left_paddle_down] and self.__paddle_inside_screen(self.__left_paddle["y"], self.__left_paddle["velocity"], False):
+            self.__left_paddle["y"] += self.__left_paddle["velocity"]
 
-        # Checking if he's not trying to go outside of the top screen
-        if keys[up_key] and self.__right_paddle["y"] > self.__res.scaled_down(MIN_DISTANCE_FROM_TOP):
-            self.__right_paddle["y"] -= self.__res.scaled_down(PADDLE_SPEED)
-
-        # Checking if he's not trying to go outside of the bottom screen
-        if keys[down_key] and self.__right_paddle["y"] < self.__res.scaled_down(MIN_DISTANCE_FROM_BOTTOM): 
-            self.__right_paddle["y"] += self.__res.scaled_down(PADDLE_SPEED)
+        if keys[right_paddle_up] and self.__paddle_inside_screen(self.__right_paddle["y"], self.__right_paddle["velocity"]):
+            self.__right_paddle["y"] -= self.__right_paddle["velocity"]
+        if keys[right_paddle_down] and self.__paddle_inside_screen(self.__right_paddle["y"], self.__right_paddle["velocity"], False):
+            self.__right_paddle["y"] += self.__right_paddle["velocity"]
 
     def run(self):
 
@@ -76,8 +90,7 @@ class Game:
                     sys.exit()
 
             # Here we will handle the up and down movements of the paddle. It's outside the event loop because it's a continuous action.
-            self.__move_left_paddle()
-            self.__move_right_paddle()
+            self.__paddles_movements()
             
             self.__screen.blit(pygame.transform.scale(self.__game_surface, self.__res.get_screen_size()), (0, 0))
             pygame.display.update()
