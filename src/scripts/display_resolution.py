@@ -70,7 +70,7 @@ class Display_resolution:
                         closest_res = res
             
             if closest_res is None:
-                raise ValueError(f"No suitable resolution found for {width}x{height}.")
+                raise ValueError(f"Your display resolution ({width} x {height}) is not supported by the developer.")
 
             return closest_res
         
