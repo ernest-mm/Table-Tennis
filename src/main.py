@@ -13,7 +13,7 @@ class Game:
         
         # Creating the window and the game surface that will be blitted to the window
         self.__res = Display_resolution()
-        self.__screen = pygame.display.set_mode(self.__res.get_screen_size(), pygame.SCALED + pygame.FULLSCREEN + pygame.NOFRAME)
+        self.__screen = pygame.display.set_mode(self.__res.get_screen_size(), pygame.SCALED + pygame.NOFRAME)
         pygame.display.set_caption("Table Tennis")
         # self.ICON = pygame.image.load("PATH")
         # pygame.display.set_icon(self.ICON)
