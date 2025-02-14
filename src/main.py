@@ -73,7 +73,29 @@ class Game:
         if keys[right_paddle_down] and self.__paddle_inside_screen(self.__right_paddle["y"], self.__right_paddle["speed"], False):
             self.__right_paddle["y"] += self.__right_paddle["speed"]
 
-    def __ball_movements(self):
+    def __collisions(self) -> None:
+        # Collision with the top and bottom of the screen
+        if self.__ball["y"] + self.__ball["radius"] >= self.__res.get_game_surf_height():
+            self.__ball["y_speed"] *= -1
+        elif self.__ball["y"] - self.__ball["radius"] <= 0:
+            self.__ball["y_speed"] *= -1
+
+        # Collision with the left paddle
+        if self.__ball["x_speed"] < 0:
+            if self.__ball["y"] >= self.__left_paddle["y"] and self.__ball["y"] <= self.__left_paddle["y"] + self.__left_paddle["height"]:
+                if self.__ball["x"] - self.__ball["radius"] <= self.__left_paddle["x"] + self.__left_paddle["width"]:
+                    self.__ball["x_speed"] *= -1
+
+                    middle_y = self.__left_paddle["y"] + (self.__left_paddle["height"] // 2)
+                    # difference_in_y = 
+
+        else:
+            # Collision with the right paddle
+            if self.__ball["y"] >= self.__right_paddle["y"] and self.__ball["y"] <= self.__right_paddle["y"] + self.__right_paddle["height"]:
+                if self.__ball["x"] + self.__ball["radius"] >= self.__right_paddle["x"]:
+                    self.__ball["x_speed"] *= -1
+
+    def __ball_movements(self) -> None:
         self.__ball["x"] += self.__ball["x_speed"]
         self.__ball["y"] -= self.__ball["y_speed"]
 
@@ -98,6 +120,9 @@ class Game:
 
             # Here we will handle the ball's movements
             self.__ball_movements()
+
+            # Handleling the collisions
+            self.__collisions()
             
             self.__screen.blit(pygame.transform.scale(self.__game_surface, self.__res.get_game_surf_size()), (0, 0))
             pygame.display.update()
