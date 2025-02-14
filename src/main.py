@@ -13,7 +13,7 @@ class Game:
         
         # Creating the window and the game surface that will be blitted to the window
         self.__res = Display_resolution()
-        self.__screen = pygame.display.set_mode(self.__res.get_user_display_size(), pygame.SCALED + pygame.NOFRAME)
+        self.__screen = pygame.display.set_mode(self.__res.get_game_surf_size(), pygame.SCALED | pygame.FULLSCREEN | pygame.NOFRAME)
         pygame.display.set_caption("Table Tennis")
         # self.ICON = pygame.image.load("PATH")
         # pygame.display.set_icon(self.ICON)
@@ -81,7 +81,7 @@ class Game:
 
         while True:
 
-            self.__game_surface.fill((0, 0, 0))
+            self.__game_surface.fill((127, 127, 127))
 
             # Drawing the paddles and the ball on the game surface
             draw_paddle(self.__game_surface, WHITE, self.__left_paddle)
