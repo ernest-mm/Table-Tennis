@@ -13,11 +13,11 @@ class Game:
         
         # Creating the window and the game surface that will be blitted to the window
         self.__res = Display_resolution()
-        self.__screen = pygame.display.set_mode(self.__res.get_screen_size(), pygame.SCALED + pygame.NOFRAME)
+        self.__screen = pygame.display.set_mode(self.__res.get_user_display_size(), pygame.SCALED + pygame.NOFRAME)
         pygame.display.set_caption("Table Tennis")
         # self.ICON = pygame.image.load("PATH")
         # pygame.display.set_icon(self.ICON)
-        self.__game_surface = pygame.Surface(self.__res.get_screen_size())
+        self.__game_surface = pygame.Surface(self.__res.get_game_surf_size())
 
         self.__clock = pygame.time.Clock()
         
@@ -99,7 +99,7 @@ class Game:
             # Here we will handle the ball's movements
             self.__ball_movements()
             
-            self.__screen.blit(pygame.transform.scale(self.__game_surface, self.__res.get_screen_size()), (0, 0))
+            self.__screen.blit(pygame.transform.scale(self.__game_surface, self.__res.get_game_surf_size()), (0, 0))
             pygame.display.update()
             self.__clock.tick(FPS)
 

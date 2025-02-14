@@ -16,12 +16,15 @@ class Display_resolution:
 
         self.__development_resolution = development_resolution
 
-        # Creating a dictionary that will contain all the information needed for pygame.display.set_mode() with the pygame.SCALED argument.
-        self.__screen_infos = dict()
+        self.__user_display_w = None
+        self.__user_display_h = None
 
-    def __get_dimensions(self) -> tuple[int, int]:
+        # Creating a dictionary that will contain all the information of the game surface.
+        self.__game_surf_infos = dict()
+
+    def __assign_display_resolution(self) -> None:
         """
-        Returns the user's display width and height.
+        Assign the user's display width and height to the appropriate attributes.
         Raises a ValueError if the dimensions cannot be retrieved.
         """
         if not pygame.get_init(): # Check if Pygame is already initialized
@@ -35,14 +38,21 @@ class Display_resolution:
             if display_info.current_w == -1 or display_info.current_h == -1:
                 raise ValueError("Unable to retrieve display dimensions.")
 
-            width, height = display_info.current_w, display_info.current_h
-
-            return width, height
+            self.__user_display_w, self.__user_display_h = display_info.current_w, display_info.current_h
         
         finally:
             # Only quit pygame if it was initialized by this function
             if pygame.get_init():  # Check if we initialized it here
                 pygame.quit()
+
+    def __run_assign_display_resolution(method):
+        """
+        A decorator that will call __assign_display_resolution before some methods that need it to be called to work.
+        """
+        def wrapper(self, *args, **kwargs): 
+            self.__assign_display_resolution()
+            return method(self, *args, **kwargs)
+        return wrapper
 
     def __get_supported_res(self, width: int, height: int) -> tuple[int, int]: 
         """
@@ -94,30 +104,31 @@ class Display_resolution:
         
         return True
     
-    def __get_screen_infos(self) -> None:
+    @__run_assign_display_resolution
+    def __get_game_surf_infos(self) -> None:
         """
-        Fill self.__screen_infos with all the information needed for pygame.display.set_mode() with the pygame.SCALED argument.
+        Fill self.__game_surf_infos with all the information needed.
         """
         
         # Checking if the developement resolution is a multiple of every supported display resolution.
         if not self.__is_multiple():
             raise ValueError(f"The developer's resolution {self.__development_resolution} should be a multiple of every supported display resolution.")
-
-        # Getting the display dimensions
-        display_width, display_height = self.__get_dimensions()
-
-        # Getting the best supported resolution for the current display dimensions
-
-        supported_res = self.__get_supported_res(display_width, display_height)
+        
+        if self.__user_display_w is not None and self.__user_display_h is not None:
+            # Getting the best supported resolution for the current display dimensions
+            supported_res = self.__get_supported_res(self.__user_display_w, self.__user_display_h)
+        else:
+            raise ValueError("Unable to retrieve display dimensions.")
 
         scale = Fraction(supported_res[0], self.__development_resolution[0])
 
-        self.__screen_infos = {
+        self.__game_surf_infos = {
             "size": (supported_res[0], supported_res[1]),
             "width": supported_res[0],
             "height": supported_res[1],
             "resolution": self.__supported_displays[supported_res],
-            "scale": scale
+            "scale": scale,
+            "user_display_resolution": (self.__user_display_w, self.__user_display_h)
         }
 
         return None
@@ -140,32 +151,32 @@ class Display_resolution:
                 
         return True
 
-    def __fill_screen_infos(self) -> None:
+    def __fill_game_surf_infos(self) -> None:
         """
-        Calls __get_screen_infos to fill self.__screen_infos.
+        Calls __get_game_surf_infos to fill self.__game_surf_infos.
         """
-        # Check if self.__screen_infos has already been filled
-        if self.__screen_infos:
+        # Check if self.__game_surf_infos has already been filled
+        if self.__game_surf_infos:
             return None
         else:
-            self.__get_screen_infos()
+            self.__get_game_surf_infos()
 
-    def __run_fill_screen_infos(method):
+    def __run_fill_game_surf_infos(method):
         """
-        A decorator that will call __fill_screen_infos before some methods that need it to be called to work.
+        A decorator that will call __fill_game_surf_infos before some methods that need it to be called to work.
         """
         def wrapper(self, *args, **kwargs): 
-            self.__fill_screen_infos()
+            self.__fill_game_surf_infos()
             return method(self, *args, **kwargs)
         return wrapper
     
-    @__run_fill_screen_infos
+    @__run_fill_game_surf_infos
     def scaled_down(self, value: int) -> int:
         """
         Takes a value (x, y, width, or height) in the developer's resolution and returns a value converted to the user's supported resolution.
         """
 
-        scale = self.__screen_infos["scale"]
+        scale = self.__game_surf_infos["scale"]
 
         if scale == 0:
             raise ValueError("Scale factor cannot be zero.")
@@ -186,56 +197,66 @@ class Display_resolution:
 
         return dev_res
     
-    @__run_fill_screen_infos
-    def get_screen_size(self) -> tuple[int, int]:
+    @__run_fill_game_surf_infos
+    def get_game_surf_size(self) -> tuple[int, int]:
         """
-        Returns the user's width and height.
+        Returns the user's game surface width and height.
         """
 
-        size = self.__screen_infos["size"]
+        size = self.__game_surf_infos["size"]
 
         return size
     
-    @__run_fill_screen_infos
-    def get_screen_width(self) -> int:
+    @__run_fill_game_surf_infos
+    def get_game_surf_width(self) -> int:
         """
-        Returns the user's screen width.
+        Returns the user's game surface width.
         """
 
-        width = self.__screen_infos["width"]
+        width = self.__game_surf_infos["width"]
 
         return width
     
-    @__run_fill_screen_infos
-    def get_screen_height(self) -> int:
+    @__run_fill_game_surf_infos
+    def get_game_surf_height(self) -> int:
         """
-        Returns the user's screen height.
+        Returns the user's game surface height.
         """
 
-        height = self.__screen_infos["height"]
+        height = self.__game_surf_infos["height"]
 
         return height
     
-    @__run_fill_screen_infos
-    def get_screen_resolution(self) -> str:
+    @__run_fill_game_surf_infos
+    def get_game_surf_res(self) -> str:
         """
-        Returns the name of the user's screen resolution
+        Returns the name of the user's game surface resolution
         """
 
-        res = self.__screen_infos["resolution"]
+        res = self.__game_surf_infos["resolution"]
 
         return res
     
-    @__run_fill_screen_infos
-    def get_screen_scale_factor(self) -> Fraction:
+    @__run_fill_game_surf_infos
+    def get_game_surf_scale_factor(self) -> Fraction:
         """
-        Returns the scale factor of the user's screen resolution, in relation to the development resolution.
+        Returns the scale factor of the user's game surface resolution, in relation to the development resolution.
         """
 
-        scale = self.__screen_infos["scale"]
+        scale = self.__game_surf_infos["scale"]
 
         return scale
     
+    @__run_fill_game_surf_infos
+    def get_user_display_size(self) -> tuple[int, int]:
+        """
+        Returns the user's display width and height.
+        """
+
+        size = self.__game_surf_infos["user_display_resolution"]
+
+        return size
+   
 if __name__ == "__main__":
     display_res = Display_resolution()
-    print(f"The screen resolution of this computer is {display_res.get_screen_resolution()}")
+    print(f"The screen resolution of this computer is {display_res.get_game_surf_res()}")
