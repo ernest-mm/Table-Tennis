@@ -1,13 +1,16 @@
 import pygame
 from fractions import Fraction
 
-# pygame.SCALED can be used to easily scale up the display with a game surface blitted on it, 
-# but it's hard to scale down all the sprites.
-# This script will chose what assets' resolution will be used in the game based on the user's display resolution.
-
+"""
+pygame.SCALED can be used to easily scale up the display with a game 
+surface blitted on it, but it's hard to scale down all the sprites.
+This script will chose what assets' resolution
+will be used in the game based on the user's display resolution.
+"""
 class Display_resolution:
     def __init__(self, development_resolution: tuple[int, int] = (3840, 2160)):
-        # Supported display resolutions (key == tuple of width and height, value == resolution name)
+        # Supported display resolutions 
+        # (key == tuple of width and height, value == resolution name)
         self.__supported_displays = {
             (3840, 2160): "4k",
             (1920, 1080): "1080p",
@@ -19,7 +22,8 @@ class Display_resolution:
         self.__user_display_w = None
         self.__user_display_h = None
 
-        # Creating a dictionary that will contain all the information of the game surface.
+        # Creating a dictionary that will contain
+        # all the information of the game surface.
         self.__game_surf_infos = dict()
 
     def __assign_display_resolution(self) -> None:
@@ -38,7 +42,10 @@ class Display_resolution:
             if display_info.current_w == -1 or display_info.current_h == -1:
                 raise ValueError("Unable to retrieve display dimensions.")
 
-            self.__user_display_w, self.__user_display_h = display_info.current_w, display_info.current_h
+            self.__user_display_w, self.__user_display_h = (
+                display_info.current_w, 
+                display_info.current_h
+            )
         
         finally:
             # Only quit pygame if it was initialized by this function
@@ -47,7 +54,8 @@ class Display_resolution:
 
     def __run_assign_display_resolution(method):
         """
-        A decorator that will call __assign_display_resolution before some methods that need it to be called to work.
+        A decorator that will call __assign_display_resolution 
+        before some methods that need it to be called to work.
         """
         def wrapper(self, *args, **kwargs): 
             self.__assign_display_resolution()
@@ -56,7 +64,8 @@ class Display_resolution:
 
     def __get_supported_res(self, width: int, height: int) -> tuple[int, int]: 
         """
-        Returns either the user's display resolution if it is supported, or a resolution smaller but close enough to it.
+        Returns either the user's display resolution if it is supported, 
+        or a resolution smaller but close enough to it.
         Raises a ValueError if no suitable resolution is found.    
         """
 
@@ -64,7 +73,8 @@ class Display_resolution:
             return (width, height)
         else:
 
-            # Looking for a supported resolution smaller than the user display but close enough to it
+            # Looking for a supported resolution smaller than 
+            # the user display but close enough to it
 
             closest_res = None
             min_diff = float('inf')
@@ -80,19 +90,26 @@ class Display_resolution:
                         closest_res = res
             
             if closest_res is None:
-                raise ValueError(f"Your display resolution ({width} x {height}) is not supported by the developer.")
+                raise ValueError(
+                    f"Your display resolution ({width} x {height})"
+                    " is not supported by the developer."
+                )
 
             return closest_res
         
     def __is_multiple(self) -> bool:
         """
-        Checks if the development_resolution is a multiple of all resolutions in the list of supported displays and have the same aspect ratio.
+        Checks if the development_resolution is a multiple 
+        of all resolutions in the list of supported displays 
+        and have the same aspect ratio.
         """
         
         dev_width, dev_height = self.__development_resolution
         
         for (res_width, res_height) in self.__supported_displays.keys():
-            # Check if the development resolution is divisible by the resolution in the supported_displays dictionary
+            # Check if the development resolution 
+            # is divisible by the resolution in the 
+            # supported_displays dictionary
             if dev_width % res_width != 0 or dev_height % res_height != 0:
                 return False
             
@@ -110,13 +127,20 @@ class Display_resolution:
         Fill self.__game_surf_infos with all the information needed.
         """
         
-        # Checking if the developement resolution is a multiple of every supported display resolution.
+        # Checking if the developement resolution 
+        # is a multiple of every supported display resolution.
         if not self.__is_multiple():
-            raise ValueError(f"The developer's resolution {self.__development_resolution} should be a multiple of every supported display resolution.")
+            raise ValueError(
+                f"The developer's resolution {self.__development_resolution}" + 
+                " should be a multiple of every supported display resolution."
+            )
         
         if self.__user_display_w is not None and self.__user_display_h is not None:
             # Getting the best supported resolution for the current display dimensions
-            supported_res = self.__get_supported_res(self.__user_display_w, self.__user_display_h)
+            supported_res = self.__get_supported_res(
+                self.__user_display_w, 
+                self.__user_display_h
+            )
         else:
             raise ValueError("Unable to retrieve display dimensions.")
 
@@ -135,7 +159,8 @@ class Display_resolution:
     
     def __is_value_multiple(self, value: int) -> bool:
         """
-        Takes a value and check if that value is a multiple of every supported display resolution's scale factor.
+        Takes a value and check if that value is a multiple 
+        of every supported display resolution's scale factor.
         """
         development_resolution = self.get_development_resolution()
         scale_factors = []
@@ -163,7 +188,8 @@ class Display_resolution:
 
     def __run_fill_game_surf_infos(method):
         """
-        A decorator that will call __fill_game_surf_infos before some methods that need it to be called to work.
+        A decorator that will call __fill_game_surf_infos 
+        before some methods that need it to be called to work.
         """
         def wrapper(self, *args, **kwargs): 
             self.__fill_game_surf_infos()
@@ -173,7 +199,8 @@ class Display_resolution:
     @__run_fill_game_surf_infos
     def scaled_down(self, value: int) -> int:
         """
-        Takes a value (x, y, width, or height) in the developer's resolution and returns a value converted to the user's supported resolution.
+        Takes a value (x, y, width, or height) in the developer's resolution 
+        and returns a value converted to the user's supported resolution.
         """
 
         scale = self.__game_surf_infos["scale"]
@@ -182,7 +209,10 @@ class Display_resolution:
             raise ValueError("Scale factor cannot be zero.")
         
         if not self.__is_value_multiple(value):
-            raise ValueError("The value must be a multiple of every supported display resolution's scale factor.")
+            raise ValueError(
+                "The value must be a multiple of every" +
+                " supported display resolution's scale factor."
+            )
 
         scaled = int(value * scale)
 
@@ -240,7 +270,8 @@ class Display_resolution:
     @__run_fill_game_surf_infos
     def get_game_surf_scale_factor(self) -> Fraction:
         """
-        Returns the scale factor of the user's game surface resolution, in relation to the development resolution.
+        Returns the scale factor of the user's game surface resolution, 
+        in relation to the development resolution.
         """
 
         scale = self.__game_surf_infos["scale"]
@@ -259,4 +290,6 @@ class Display_resolution:
    
 if __name__ == "__main__":
     display_res = Display_resolution()
-    print(f"The screen resolution of this computer is {display_res.get_game_surf_res()}")
+    print(
+        f"The screen resolution of this computer is {display_res.get_game_surf_res()}"
+    )

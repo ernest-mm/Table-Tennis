@@ -10,12 +10,15 @@ PADDLE_HEIGHT: int = 2160 // 5
 
 PADDLE_SPEED: int = 18
 
-# Minimum distance of the paddle from the left or right of the screen in 4k
+# Minimum distance of the paddle from the left 
+# or right of the screen in 4k
 MIN_DISTANCE_FROM_LEFT_OR_RIGHT: int = BALL_RADIUS//2
 # Minimum distance of the paddle from the top of the screen in 4k
 MIN_DISTANCE_FROM_TOP: int = MIN_DISTANCE_FROM_LEFT_OR_RIGHT
 # Minimum distance of the paddle from the bottom of the screen in 4k
-MIN_DISTANCE_FROM_BOTTOM: int = 2160 - PADDLE_HEIGHT - MIN_DISTANCE_FROM_LEFT_OR_RIGHT
+MIN_DISTANCE_FROM_BOTTOM: int = (
+    2160 - PADDLE_HEIGHT - MIN_DISTANCE_FROM_LEFT_OR_RIGHT
+)
 
 # Colors
 WHITE: tuple = (255, 255, 255)
