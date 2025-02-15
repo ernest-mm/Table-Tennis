@@ -31,9 +31,43 @@ class Game:
         # Creating the ball
         self.__ball = ball(self.__res)
 
+        # A variable that will store the boolean
+        # telling if there is a match playing or not
+        self.__playing = False
+
     def main_menu(self):
         pass
 
+    def __start_match(self) -> None:
+        """
+        Start the match if it hasn't started by making the ball move
+        """
+        # Getting the keys that have been pressed
+        keys = pygame.key.get_pressed()
+
+        left_paddle_up = self.__left_paddle["up_key"]
+        left_paddle_down = self.__left_paddle["down_key"]
+
+        right_paddle_up = self.__right_paddle["up_key"]
+        right_paddle_down = self.__right_paddle["down_key"]
+
+        if self.__playing == False:
+            if (self.__left_paddle["score"] > self.__right_paddle["score"]):
+                if keys[left_paddle_up] or keys[left_paddle_down]:
+                    self.__ball["x_speed"] *= -1
+                    self.__playing = True 
+                
+            elif (self.__left_paddle["score"] < self.__right_paddle["score"]):
+                if keys[right_paddle_up] or keys[right_paddle_down]:
+                    self.__playing = True
+
+            else:
+                if keys[left_paddle_up] or keys[left_paddle_down]:
+                    self.__ball["x_speed"] *= -1
+                    self.__playing = True
+                elif keys[right_paddle_up] or keys[right_paddle_down]:
+                    self.__playing = True
+    
     def __paddle_inside_screen(
             self, 
             y_coordinate: int, 
@@ -61,13 +95,11 @@ class Game:
         # Getting the keys that have been pressed
         keys = pygame.key.get_pressed()
 
-        # Setting up the keys for the paddles' up and down movements
+        left_paddle_up = self.__left_paddle["up_key"]
+        left_paddle_down = self.__left_paddle["down_key"]
 
-        left_paddle_up = pygame.K_w
-        left_paddle_down = pygame.K_s
-
-        right_paddle_up = pygame.K_UP
-        right_paddle_down = pygame.K_DOWN
+        right_paddle_up = self.__right_paddle["up_key"]
+        right_paddle_down = self.__right_paddle["down_key"]
 
         # Moving the paddles only if they are inside the screen
 
@@ -101,7 +133,7 @@ class Game:
                 )):
             self.__right_paddle["y"] += self.__right_paddle["speed"]
 
-    def __top_bottom_collisions(self):
+    def __top_bottom_collisions(self) -> None:
         """
         Handles the collisions of the ball with the top and bottom 
         of the screen
@@ -129,8 +161,6 @@ class Game:
         y_speed = difference_in_y / reduction_factor
         self.__ball["y_speed"] = -1 * y_speed
 
-        
-
     def __collisions(self) -> None:
         """
         Handles all the collisions of the ball
@@ -157,8 +187,42 @@ class Game:
                     self.__ball_angle_change(False)
 
     def __ball_movements(self) -> None:
-        self.__ball["x"] += self.__ball["x_speed"]
-        self.__ball["y"] -= self.__ball["y_speed"]
+        if self.__playing:
+            self.__ball["x"] += self.__ball["x_speed"]
+            self.__ball["y"] -= self.__ball["y_speed"]
+
+    def __new_match(self) -> None:
+        """
+        Reset the positions of the paddles and ball to start a new match
+        """
+        self.__left_paddle = paddle(self.__res)
+        self.__right_paddle = paddle(self.__res, False)
+        self.__ball = ball(self.__res)
+        self.__playing = False
+
+    def __check_winner(self) -> None:
+        """
+        Checks whether the ball has gone of the left or right screen
+        and updates the paddle's score and match_won accordingly
+        """
+        if self.__ball["x"] + self.__ball["radius"] < 0:
+            self.__right_paddle["score"] += 1
+            if self.__right_paddle["score"] >= 10:
+                self.__right_paddle["score"] = 0
+                self.__right_paddle["match_won"] += 1
+                self.__new_match()
+            else:
+                self.__new_match()
+
+        elif (self.__ball["x"] - self.__ball["radius"] >
+                self.__res.get_game_surf_width()):
+            self.__left_paddle["score"] += 1
+            if self.__left_paddle["score"] >= 10:
+                self.__left_paddle["score"] = 0
+                self.__left_paddle["match_won"] += 1
+                self.__new_match()
+            else:
+                self.__new_match()
 
     def run(self):
 
@@ -175,6 +239,8 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+            self.__start_match()
+
             # Here we will handle the up and down movements of the paddle. 
             # It's outside the event loop because it's a continuous action.
             self.__paddles_movements()
@@ -184,7 +250,9 @@ class Game:
 
             # Handleling the collisions
             self.__collisions()
-            
+
+            self.__check_winner()
+
             self.__screen.blit(
                 pygame.transform.scale(self.__game_surface, self.__res.get_game_surf_size()), 
                 (0, 0)

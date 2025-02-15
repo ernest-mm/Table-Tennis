@@ -8,7 +8,8 @@ def paddle(
     ) -> dict:
     """
     Returns a dictionary containing the paddle's width, 
-    height, x and y coordinates and speed.
+    height, x and y coordinates, speed, up and down keys, 
+    score(s) and match_won.
     """
     resolution = display_resolution_object
     width: int = resolution.scaled_down(PADDLE_WIDTH)
@@ -16,12 +17,16 @@ def paddle(
 
     if left_paddle:
         x_position: int = resolution.scaled_down(MIN_DISTANCE_FROM_LEFT_OR_RIGHT)
+        up_key = pygame.K_w
+        down_key = pygame.K_s
     else:
         x_position: int = (
             resolution.get_game_surf_width() - 
             resolution.scaled_down(MIN_DISTANCE_FROM_LEFT_OR_RIGHT) -
             width
         )
+        up_key = pygame.K_UP
+        down_key = pygame.K_DOWN
 
     # The paddle height is 1/5 of the screen height, 
     # so the y position will be in the middle, at the 3rd position
@@ -34,7 +39,11 @@ def paddle(
         "height": height,
         "x": x_position,
         "y": y_position,
-        "speed": speed
+        "speed": speed,
+        "up_key": up_key,
+        "down_key": down_key,
+        "score": 0,
+        "match_won": 0
     }
 
     return paddle_infos
@@ -68,7 +77,7 @@ def ball(display_resolution_object: Display_resolution) -> dict:
         "x": x_position,
         "y": y_position,
         "radius": radius,
-        "x_speed": resolution.scaled_down(30),
+        "x_speed": resolution.scaled_down(-24),
         "y_speed": 0
     }
 
