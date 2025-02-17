@@ -3,6 +3,7 @@ import sys
 from scripts.display_resolution import Display_resolution
 from scripts.constants import *
 from scripts.entities import paddle, draw_paddle, ball, draw_ball
+from scripts.rendering_scripts import render_table
 
 class Game:
     def __init__(self):
@@ -228,6 +229,7 @@ class Game:
 
         while True:
             self.__game_surface.fill((127, 127, 127))
+            render_table(self.__res, self.__game_surface)
 
             # Drawing the paddles and the ball on the game surface
             draw_paddle(self.__game_surface, WHITE, self.__left_paddle)

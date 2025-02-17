@@ -22,3 +22,6 @@ MIN_DISTANCE_FROM_BOTTOM: int = (
 
 # Colors
 WHITE: tuple = (255, 255, 255)
+BLACK: tuple = (0, 0, 0)
+SHADOW_WHITE: tuple = (220, 220, 220)
+FOREST_GREEN: tuple = (0, 102, 0)
