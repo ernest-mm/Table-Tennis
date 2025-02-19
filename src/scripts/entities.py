@@ -8,7 +8,7 @@ def paddle(
     ) -> dict:
     """
     Returns a dictionary containing the paddle's width, 
-    height, x and y coordinates, speed, up and down keys, 
+    height, x and y coordinates, image, speed, up and down keys, 
     score(s) and match_won.
     """
     resolution = display_resolution_object
@@ -19,6 +19,8 @@ def paddle(
         x_position: int = resolution.scaled_down(MIN_DISTANCE_FROM_LEFT_OR_RIGHT)
         up_key = pygame.K_w
         down_key = pygame.K_s
+        base_path = f"{PADDLES_IMG_PATH}{resolution.get_game_surf_res()}"
+        path = f"{base_path}_left_paddle.png"
     else:
         x_position: int = (
             resolution.get_game_surf_width() - 
@@ -27,6 +29,8 @@ def paddle(
         )
         up_key = pygame.K_UP
         down_key = pygame.K_DOWN
+        base_path = f"{PADDLES_IMG_PATH}{resolution.get_game_surf_res()}"
+        path = f"{base_path}_right_paddle.png"
 
     # The paddle height is 1/5 of the screen height, 
     # so the y position will be in the middle, at the 3rd position
@@ -34,11 +38,14 @@ def paddle(
 
     speed = resolution.scaled_down(PADDLE_SPEED)
 
+    image = pygame.image.load(path)
+
     paddle_infos = {
         "width": width,
         "height": height,
         "x": x_position,
         "y": y_position,
+        "image": image,
         "speed": speed,
         "up_key": up_key,
         "down_key": down_key,
@@ -48,19 +55,14 @@ def paddle(
 
     return paddle_infos
 
-
 def draw_paddle(surface: pygame.Surface, color: tuple, paddle: dict) -> None:
     """
-    Draw the paddle on a given surface
+    Blits the paddle on a given surface
     """
-    paddle["rect"] = pygame.Rect(
-        paddle["x"], 
-        paddle["y"], 
-        paddle["width"], 
-        paddle["height"]
+    surface.blit(
+        paddle["image"],
+        (paddle["x"], paddle["y"])
     )
-    pygame.draw.rect(surface, color, paddle["rect"])
-
 
 def ball(display_resolution_object: Display_resolution) -> dict:
     """
@@ -83,7 +85,6 @@ def ball(display_resolution_object: Display_resolution) -> dict:
 
     return ball_infos
 
-
 def draw_ball(surface: pygame.Surface, color: tuple, ball: dict) -> None:
     """
     Draw the ball on a given surface
@@ -95,6 +96,5 @@ def draw_ball(surface: pygame.Surface, color: tuple, ball: dict) -> None:
         ball["radius"]
     )
     
-
 if __name__ == "__main__":
     print("This script is only meant to be imported")

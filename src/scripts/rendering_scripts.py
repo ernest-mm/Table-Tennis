@@ -68,33 +68,80 @@ def draw_net_posts(
     """
     Draws the net posts of the table
     """
-    net_post_w = (
-        resolution.scaled_down(BALL_RADIUS) * 2 - 
-        resolution.scaled_down(12)
-    )
-    net_post_h = resolution.scaled_down(BALL_RADIUS * 3)
-    net_post_x = (resolution.get_game_surf_width() - net_post_w) // 2
+    dev_screen_w, dev_screen_h = resolution.get_development_resolution()
+
+    net_post_w = PADDLE_WIDTH
+    net_post_h = BALL_RADIUS * 3
+
+    net_post_x = resolution.scaled_down(dev_screen_w - net_post_w) // 2
     net_post_1_y = 0
-    net_post_2_y = resolution.get_game_surf_height() - net_post_h
+    net_post_2_y = resolution.scaled_down(dev_screen_h - net_post_h)
 
     net_post_1 = pygame.Rect(
         net_post_x,
         net_post_1_y,
-        net_post_w,
-        net_post_h
+        resolution.scaled_down(net_post_w),
+        resolution.scaled_down(net_post_h)
     )
     net_post_2 = pygame.Rect(
         net_post_x,
         net_post_2_y,
-        net_post_w,
-        net_post_h
+        resolution.scaled_down(net_post_w),
+        resolution.scaled_down(net_post_h)
     )
 
     # Drawing the net posts
     pygame.draw.rect(surface, BLACK, net_post_1)
     pygame.draw.rect(surface, BLACK, net_post_2)
 
+def draw_net(
+        resolution: Display_resolution, 
+        surface: pygame.Surface
+    ) -> None:
+    """
+    Draws the net on the table in top view
+    """
+    net_width = 12
+    bottom_net_width = net_width * 2
 
+    dev_screen_w, dev_screen_h = resolution.get_development_resolution()
+
+    start_pos = (
+        resolution.scaled_down(dev_screen_w) // 2,
+        0
+    )
+    bottom_net_start_pos = (
+        resolution.scaled_down(dev_screen_w) // 2,
+        0
+    )
+    
+    end_pos = (
+        resolution.scaled_down(dev_screen_w) // 2, 
+        resolution.scaled_down(dev_screen_h)
+    )
+    bottom_net_end_pos = (
+        resolution.scaled_down(dev_screen_w) // 2, 
+        resolution.scaled_down(dev_screen_h)
+    )
+
+    # Drawing the first "line" that will be bellow the second line
+    # creating a depth or shadow effect
+    pygame.draw.line(
+        surface,
+        GRAY,
+        bottom_net_start_pos,
+        bottom_net_end_pos,
+        resolution.scaled_down(bottom_net_width)
+    )
+
+    # Drawing the top net
+    pygame.draw.line(
+        surface,
+        SHADOW_WHITE,
+        start_pos,
+        end_pos,
+        resolution.scaled_down(net_width)
+    )
 
 def render_table(
         resolution: Display_resolution, 
@@ -111,5 +158,5 @@ def render_table(
     draw_table_borders(resolution, surface)
 
     draw_net_posts(resolution, surface)
-    
-    
+
+    draw_net(resolution, surface)

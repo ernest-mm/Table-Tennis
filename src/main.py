@@ -228,7 +228,6 @@ class Game:
     def run(self):
 
         while True:
-            self.__game_surface.fill((127, 127, 127))
             render_table(self.__res, self.__game_surface)
 
             # Drawing the paddles and the ball on the game surface
