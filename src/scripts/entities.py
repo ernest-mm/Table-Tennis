@@ -8,8 +8,7 @@ def paddle(
     ) -> dict:
     """
     Returns a dictionary containing the paddle's width, 
-    height, x and y coordinates, image, speed, up and down keys, 
-    score(s) and match_won.
+    height, x and y coordinates, image, speed, up and down keys.
     """
     resolution = display_resolution_object
     width: int = resolution.scaled_down(PADDLE_WIDTH)
@@ -48,9 +47,7 @@ def paddle(
         "image": image,
         "speed": speed,
         "up_key": up_key,
-        "down_key": down_key,
-        "score": 0,
-        "match_won": 0
+        "down_key": down_key
     }
 
     return paddle_infos

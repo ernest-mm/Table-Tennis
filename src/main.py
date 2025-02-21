@@ -3,7 +3,7 @@ import sys
 from scripts.display_resolution import Display_resolution
 from scripts.constants import *
 from scripts.entities import paddle, draw_paddle, ball, draw_ball
-from scripts.rendering_scripts import render_table
+from scripts.rendering_scripts import render_table, render_match_won_text
 
 class Game:
     def __init__(self):
@@ -36,6 +36,16 @@ class Game:
         # telling if there is a match playing or not
         self.__playing = False
 
+        # Match won and scores
+        self.__left_scores = {
+            "match_won": 0,
+            "score": 0
+        }
+        self.__right_scores = {
+            "match_won": 0,
+            "score": 0
+        }
+
     def main_menu(self):
         pass
 
@@ -53,12 +63,12 @@ class Game:
         right_paddle_down = self.__right_paddle["down_key"]
 
         if self.__playing == False:
-            if (self.__left_paddle["score"] > self.__right_paddle["score"]):
+            if (self.__left_scores["score"] > self.__right_scores["score"]):
                 if keys[left_paddle_up] or keys[left_paddle_down]:
                     self.__ball["x_speed"] *= -1
                     self.__playing = True 
                 
-            elif (self.__left_paddle["score"] < self.__right_paddle["score"]):
+            elif (self.__left_scores["score"] < self.__right_scores["score"]):
                 if keys[right_paddle_up] or keys[right_paddle_down]:
                     self.__playing = True
 
@@ -207,20 +217,20 @@ class Game:
         and updates the paddle's score and match_won accordingly
         """
         if self.__ball["x"] + self.__ball["radius"] < 0:
-            self.__right_paddle["score"] += 1
-            if self.__right_paddle["score"] >= 10:
-                self.__right_paddle["score"] = 0
-                self.__right_paddle["match_won"] += 1
+            self.__right_scores["score"] += 1
+            if self.__right_scores["score"] >= 10:
+                self.__right_scores["score"] = 0
+                self.__right_scores["match_won"] += 1
                 self.__new_match()
             else:
                 self.__new_match()
 
         elif (self.__ball["x"] - self.__ball["radius"] >
                 self.__res.get_game_surf_width()):
-            self.__left_paddle["score"] += 1
-            if self.__left_paddle["score"] >= 10:
-                self.__left_paddle["score"] = 0
-                self.__left_paddle["match_won"] += 1
+            self.__left_scores["score"] += 1
+            if self.__left_scores["score"] >= 10:
+                self.__left_scores["score"] = 0
+                self.__left_scores["match_won"] += 1
                 self.__new_match()
             else:
                 self.__new_match()
@@ -234,6 +244,13 @@ class Game:
             draw_paddle(self.__game_surface, WHITE, self.__left_paddle)
             draw_paddle(self.__game_surface, WHITE, self.__right_paddle)
             draw_ball(self.__game_surface, WHITE, self.__ball)
+
+            render_match_won_text(
+                self.__left_scores["match_won"],
+                self.__right_scores["match_won"],
+                self.__game_surface,
+                self.__res
+            )
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
