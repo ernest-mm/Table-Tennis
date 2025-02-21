@@ -36,3 +36,6 @@ SCORES_FONT_SIZE: int = 54
 
 # "Match won" text y position in 4k
 MATCH_TEXT_Y: int = 120
+
+BALL_X_SPEED: int = -24
+BALL_X_SPEED_VARIATION:int = 6
