@@ -32,7 +32,7 @@ PADDLES_IMG_PATH: str = "assets/images/paddles/"
 FONT_PATH: str = "assets/fonts/Boogaloo-Regular.ttf"
 
 # "Match won" and "Scores" font size in 4k
-MATCH_SCORE_FONT_SIZE: int = 54
+SCORES_FONT_SIZE: int = 54
 
 # "Match won" text y position in 4k
 MATCH_TEXT_Y: int = 120

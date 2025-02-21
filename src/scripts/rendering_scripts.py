@@ -205,20 +205,22 @@ def get_text_object(
     }
     return return_value
 
-def render_match_won_text(
+def render_scores_text(
+        text: str,
         left_score: int,
         right_score: int,
         surface: pygame.Surface,
         resolution: Display_resolution,
+        is_match_score: bool = True
     ) -> None:
     """
-    Render the match won on the game surface
+    Render the match won or score texts on the game surface
     """
-    font_size = resolution.scaled_down(MATCH_SCORE_FONT_SIZE)
+    font_size = resolution.scaled_down(SCORES_FONT_SIZE)
 
     text_infos = get_text_object(
         font_size,
-        "MATCH WON",
+        text,
         WHITE,
         True,
         False
@@ -234,7 +236,7 @@ def render_match_won_text(
 
     text_shadow_infos = get_text_object(
         font_size,
-        "MATCH WON",
+        text,
         BLACK,
         True,
         True
@@ -249,16 +251,21 @@ def render_match_won_text(
     )
 
     text_x = (resolution.get_game_surf_width() - text_infos["width"]) // 2
-    text_y = resolution.scaled_down(MATCH_TEXT_Y)
-
     score_x = (resolution.get_game_surf_width() - score_infos["width"]) // 2
-    score_y = resolution.scaled_down(MATCH_TEXT_Y) + score_infos["height"]
-
     text_shadow_x = (resolution.get_game_surf_width() - text_shadow_infos["width"]) // 2
-    text_shadow_y = resolution.scaled_down(MATCH_TEXT_Y)
-
     score_shadow_x = (resolution.get_game_surf_width() - score_shadow_infos["width"]) // 2
-    score_shadow_y = resolution.scaled_down(MATCH_TEXT_Y) + score_infos["height"]
+    
+    if is_match_score:
+        text_y = resolution.scaled_down(MATCH_TEXT_Y)
+        score_y = resolution.scaled_down(MATCH_TEXT_Y) + score_infos["height"]
+        text_shadow_y = resolution.scaled_down(MATCH_TEXT_Y)
+        score_shadow_y = resolution.scaled_down(MATCH_TEXT_Y) + score_infos["height"]
+    else:
+        y = MATCH_TEXT_Y + (score_infos["height"] * 4)
+        text_y = resolution.scaled_down(y)
+        score_y = resolution.scaled_down(y) + score_infos["height"]
+        text_shadow_y = resolution.scaled_down(y)
+        score_shadow_y = resolution.scaled_down(y) + score_infos["height"]
 
     surface.blit(
         text_shadow_infos["text"],
@@ -280,7 +287,40 @@ def render_match_won_text(
         (score_x, score_y)
     )
 
+def render_match_won(
+        left_score: int,
+        right_score: int,
+        surface: pygame.Surface,
+        resolution: Display_resolution,
+    ) -> None:
+    """
+    Render the match won on the game surface
+    """
+    render_scores_text(
+        "MATCH WON",
+        left_score,
+        right_score,
+        surface,
+        resolution
+    )
 
+def render_scores(
+        left_score: int,
+        right_score: int,
+        surface: pygame.Surface,
+        resolution: Display_resolution,
+    ) -> None:
+    """
+    Render the scores of a match on the game surface
+    """
+    render_scores_text(
+        f"SCORES",
+        left_score,
+        right_score,
+        surface,
+        resolution,
+        False
+    )
 
 def render_text(
         text: str,

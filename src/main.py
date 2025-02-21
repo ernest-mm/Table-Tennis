@@ -3,7 +3,7 @@ import sys
 from scripts.display_resolution import Display_resolution
 from scripts.constants import *
 from scripts.entities import paddle, draw_paddle, ball, draw_ball
-from scripts.rendering_scripts import render_table, render_match_won_text
+from scripts.rendering_scripts import render_table, render_match_won, render_scores
 
 class Game:
     def __init__(self):
@@ -63,21 +63,11 @@ class Game:
         right_paddle_down = self.__right_paddle["down_key"]
 
         if self.__playing == False:
-            if (self.__left_scores["score"] > self.__right_scores["score"]):
-                if keys[left_paddle_up] or keys[left_paddle_down]:
-                    self.__ball["x_speed"] *= -1
-                    self.__playing = True 
-                
-            elif (self.__left_scores["score"] < self.__right_scores["score"]):
-                if keys[right_paddle_up] or keys[right_paddle_down]:
-                    self.__playing = True
-
-            else:
-                if keys[left_paddle_up] or keys[left_paddle_down]:
-                    self.__ball["x_speed"] *= -1
-                    self.__playing = True
-                elif keys[right_paddle_up] or keys[right_paddle_down]:
-                    self.__playing = True
+            if keys[left_paddle_up] or keys[left_paddle_down]:
+                self.__ball["x_speed"] *= -1
+                self.__playing = True
+            elif keys[right_paddle_up] or keys[right_paddle_down]:
+                self.__playing = True
     
     def __paddle_inside_screen(
             self, 
@@ -219,6 +209,7 @@ class Game:
         if self.__ball["x"] + self.__ball["radius"] < 0:
             self.__right_scores["score"] += 1
             if self.__right_scores["score"] >= 10:
+                self.__left_scores["score"] = 0
                 self.__right_scores["score"] = 0
                 self.__right_scores["match_won"] += 1
                 self.__new_match()
@@ -230,6 +221,7 @@ class Game:
             self.__left_scores["score"] += 1
             if self.__left_scores["score"] >= 10:
                 self.__left_scores["score"] = 0
+                self.__right_scores["score"] = 0
                 self.__left_scores["match_won"] += 1
                 self.__new_match()
             else:
@@ -245,9 +237,16 @@ class Game:
             draw_paddle(self.__game_surface, WHITE, self.__right_paddle)
             draw_ball(self.__game_surface, WHITE, self.__ball)
 
-            render_match_won_text(
+            render_match_won(
                 self.__left_scores["match_won"],
                 self.__right_scores["match_won"],
+                self.__game_surface,
+                self.__res
+            )
+
+            render_scores(
+                self.__left_scores["score"],
+                self.__right_scores["score"],
                 self.__game_surface,
                 self.__res
             )
