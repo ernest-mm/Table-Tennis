@@ -52,7 +52,10 @@ def paddle(
 
     return paddle_infos
 
-def draw_paddle(surface: pygame.Surface, color: tuple, paddle: dict) -> None:
+def draw_paddle(
+        surface: pygame.Surface,  
+        paddle: dict
+    ) -> None:
     """
     Blits the paddle on a given surface
     """
@@ -61,7 +64,10 @@ def draw_paddle(surface: pygame.Surface, color: tuple, paddle: dict) -> None:
         (paddle["x"], paddle["y"])
     )
 
-def ball(display_resolution_object: Display_resolution, x_speed:int = BALL_X_SPEED) -> dict:
+def ball(
+        display_resolution_object: Display_resolution, 
+        x_speed:int = BALL_X_SPEED
+    ) -> dict:
     """
     Returns a dictionary containing the ball's x and
     y coordinates (they are the center of the ball), 

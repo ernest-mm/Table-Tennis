@@ -48,9 +48,6 @@ class Game:
             "score": 0
         }
 
-    def main_menu(self):
-        pass
-
     def __start_match(self) -> None:
         """
         Start the match if it hasn't started by making the ball move
@@ -239,14 +236,17 @@ class Game:
             else:
                 self.__new_match()
 
+    def main_menu(self):
+        pass
+
     def run(self):
 
         while True:
             render_table(self.__res, self.__game_surface)
 
             # Drawing the paddles and the ball on the game surface
-            draw_paddle(self.__game_surface, WHITE, self.__left_paddle)
-            draw_paddle(self.__game_surface, WHITE, self.__right_paddle)
+            draw_paddle(self.__game_surface, self.__left_paddle)
+            draw_paddle(self.__game_surface, self.__right_paddle)
             draw_ball(self.__game_surface, WHITE, self.__ball)
 
             render_match_won(
