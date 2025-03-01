@@ -30,6 +30,7 @@ FOREST_GREEN: tuple = (0, 102, 0)
 # PATHS
 PADDLES_IMG_PATH: str = "assets/images/paddles/"
 FONT_PATH: str = "assets/fonts/Boogaloo-Regular.ttf"
+MAIN_MENU_IMG_PATH: str = "assets/images/main_menu/"
 
 # "Match won" and "Scores" font size in 4k
 SCORES_FONT_SIZE: int = 54

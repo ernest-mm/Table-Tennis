@@ -3,7 +3,7 @@ import sys
 from scripts.display_resolution import Display_resolution
 from scripts.constants import *
 from scripts.entities import paddle, draw_paddle, ball, draw_ball
-from scripts.rendering_scripts import render_table, render_match_won, render_scores
+from scripts.rendering_scripts import render_table, render_match_won, render_scores, render_main_menu_bg, render_main_menu_title
 
 class Game:
     def __init__(self):
@@ -237,7 +237,22 @@ class Game:
                 self.__new_match()
 
     def main_menu(self):
-        pass
+        while True:
+            render_main_menu_bg(self.__game_surface, self.__res)
+            render_main_menu_title(self.__game_surface, self.__res)
+            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            self.__screen.blit(
+                pygame.transform.scale(self.__game_surface, self.__res.get_game_surf_size()), 
+                (0, 0)
+            )
+            pygame.display.update()
+            self.__clock.tick(FPS)
+
 
     def run(self):
 
@@ -291,4 +306,4 @@ class Game:
 
 if __name__ == "__main__":
     game = Game()
-    game.run()
+    game.main_menu()
