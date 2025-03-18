@@ -3,7 +3,9 @@ import sys
 from scripts.display_resolution import Display_resolution
 from scripts.constants import *
 from scripts.entities import paddle, draw_paddle, ball, draw_ball
-from scripts.rendering_scripts import render_table, render_match_won, render_scores, render_main_menu_bg, render_main_menu_title
+from scripts.table_rendering import render_table
+from scripts.main_menu_rendering import render_main_menu_bg, render_main_menu_title
+from scripts.scores_rendering import render_match_won, render_scores
 
 class Game:
     def __init__(self):
@@ -306,4 +308,4 @@ class Game:
 
 if __name__ == "__main__":
     game = Game()
-    game.main_menu()
+    game.run()

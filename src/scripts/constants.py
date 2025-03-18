@@ -25,7 +25,7 @@ WHITE: tuple = (255, 255, 255)
 BLACK: tuple = (0, 0, 0)
 SHADOW_WHITE: tuple = (210, 210, 210)
 GRAY: tuple = (128, 128, 128)
-FOREST_GREEN: tuple = (0, 102, 0)
+FOREST_GREEN: tuple = (57, 112, 80)
 
 # PATHS
 PADDLES_IMG_PATH: str = "assets/images/paddles/"
