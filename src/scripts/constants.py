@@ -40,3 +40,6 @@ MATCH_TEXT_Y: int = 120
 
 BALL_X_SPEED: int = -30
 BALL_X_SPEED_VARIATION:int = 6
+
+# Button size in 4k
+BUTTON_SIZE = 72
