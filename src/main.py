@@ -240,81 +240,49 @@ class Game:
                 self.__new_match()
 
     def main_menu(self):
+        new_game_button = Button(
+            self.__game_surface,
+            "NEW GAME",
+            self.__res.scaled_down(102),
+            0,
+            0
+        )
+        quit_button = Button(
+            self.__game_surface,
+            "QUIT",
+            self.__res.scaled_down(102),
+            0,
+            0
+        )
+
+        new_game_button_top_x = (self.__res.get_game_surf_width() - new_game_button.get_width()) // 2
+        new_game_button_top_y = self.__res.scaled_down(1200)
+
+        quit_button_top_x = (self.__res.get_game_surf_width() - quit_button.get_width()) // 2
+        quit_button_top_y = new_game_button_top_y + self.__res.scaled_down(210)
 
         new_game_button = Button(
             self.__game_surface,
             "NEW GAME",
-            self.__res.scaled_down(BUTTON_SIZE),
-            0,
-            0
+            self.__res.scaled_down(102),
+            new_game_button_top_x,
+            new_game_button_top_y
         )
-
-        options_button = Button(
-            self.__game_surface,
-            "OPTIONS",
-            self.__res.scaled_down(BUTTON_SIZE),
-            0,
-            0
-        )
-
         quit_button = Button(
             self.__game_surface,
             "QUIT",
-            self.__res.scaled_down(BUTTON_SIZE),
-            0,
-            0
+            self.__res.scaled_down(102),
+            quit_button_top_x,
+            quit_button_top_y
         )
 
-        new_game_button_x = (self.__res.get_game_surf_width() - new_game_button.get_width()) // 2
-        new_game_button_y = self.__res.get_game_surf_height() // 3
-
-        options_button_x = (self.__res.get_game_surf_width() - options_button.get_width()) // 2
-        options_button_y = (self.__res.get_game_surf_height() // 3) + (new_game_button.get_height() * 3)
-
-        quit_button_x = (self.__res.get_game_surf_width() - quit_button.get_width()) // 2
-        quit_button_y = (self.__res.get_game_surf_height() // 3) + (new_game_button.get_height() * 6)
-
-        new_game_button = Button(
-            self.__game_surface,
-            "NEW GAME",
-            self.__res.scaled_down(BUTTON_SIZE),
-            new_game_button_x,
-            new_game_button_y
-        )
-
-        options_button = Button(
-            self.__game_surface,
-            "OPTIONS",
-            self.__res.scaled_down(BUTTON_SIZE),
-            options_button_x,
-            options_button_y
-        )
-
-        quit_button = Button(
-            self.__game_surface,
-            "QUIT",
-            self.__res.scaled_down(BUTTON_SIZE),
-            quit_button_x,
-            quit_button_y
-        )
-
-        test_button = Button(
-            self.__game_surface,
-            "NEW GAME",
-            37,
-            (1920//2),
-            (1080//2)
-        )
         while True:
             render_main_menu_bg(self.__game_surface, self.__res)
             render_main_menu_title(self.__game_surface, self.__res)
 
             mouse_position = pygame.mouse.get_pos()
 
-            test_button.render(mouse_position)
-
             new_game_button.render(mouse_position)
-            options_button.render(mouse_position)
             quit_button.render(mouse_position)
             
             for event in pygame.event.get():
@@ -323,8 +291,11 @@ class Game:
                     sys.exit()
 
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    if test_button.mouse_hover(mouse_position):
+                    if new_game_button.mouse_hover(mouse_position):
                         return self.run()
+                    if quit_button.mouse_hover(mouse_position):
+                        pygame.quit()
+                        sys.exit()
 
             self.__screen.blit(
                 pygame.transform.scale(self.__game_surface, self.__res.get_game_surf_size()), 

@@ -28,9 +28,9 @@ GRAY: tuple = (128, 128, 128)
 FOREST_GREEN: tuple = (57, 112, 80)
 
 # PATHS
-PADDLES_IMG_PATH: str = "assets/images/paddles/"
-FONT_PATH: str = "assets/fonts/Boogaloo-Regular.ttf"
-MAIN_MENU_IMG_PATH: str = "assets/images/main_menu/"
+PADDLES_IMG_PATH: str = "src/assets/images/paddles/"
+FONT_PATH: str = "src/assets/fonts/Boogaloo-Regular.ttf"
+MAIN_MENU_IMG_PATH: str = "src/assets/images/main_menu/"
 
 # "Match won" and "Scores" font size in 4k
 SCORES_FONT_SIZE: int = 54
