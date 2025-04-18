@@ -16,6 +16,7 @@ Your understanding and patience are appreciated.*
 
 ### In-Game
 ![In-Game 1](images/in_game_1.png)
+
 ![In-Game 2](images/in_game_2.png)
 
 ## Installation
@@ -58,4 +59,4 @@ python src/main.py
   - Pygame Community for the excellent documentation and resources
 
 ## License
-This project is licensed under the MIT License - see the  file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
