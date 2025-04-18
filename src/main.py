@@ -34,8 +34,8 @@ class Game:
 
         # Creating the ball and a variable that will contain the
         # in game ball's x speed
-        self.__ball = ball(self.__res)
-        self.__ball_x_speed = BALL_X_SPEED
+        self.__ball = ball(self.__res, self.__res.scaled_down(BALL_X_SPEED))
+        self.__ball_x_speed = self.__res.scaled_down(BALL_X_SPEED)
 
         # A variable that will store the boolean
         # telling if there is a match playing or not
@@ -201,6 +201,8 @@ class Game:
         self.__left_paddle = paddle(self.__res)
         self.__right_paddle = paddle(self.__res, False)
         self.__ball = ball(self.__res, self.__ball_x_speed)
+        # Ensure the ball's speed matches the current base speed
+        self.__ball["x_speed"] = self.__ball_x_speed
         self.__playing = False
 
     def __check_winner(self) -> None:
@@ -210,15 +212,18 @@ class Game:
         """
         if self.__ball["x"] + self.__ball["radius"] < 0:
             self.__right_scores["score"] += 1
+            # Make the ball faster by increasing the absolute value of the speed
+            # Use a percentage-based increase that gets smaller as the score gets higher
+            speed_increase = self.__res.scaled_down(BALL_X_SPEED_VARIATION) * (1 / (1 + self.__right_scores["score"] * 0.1))
             if self.__ball["x_speed"] < 0:
-                self.__ball_x_speed -= BALL_X_SPEED_VARIATION
+                self.__ball_x_speed -= speed_increase
             else:
-                self.__ball_x_speed += BALL_X_SPEED_VARIATION
+                self.__ball_x_speed += speed_increase
             if self.__right_scores["score"] >= 10:
                 self.__left_scores["score"] = 0
                 self.__right_scores["score"] = 0
                 self.__right_scores["match_won"] += 1
-                self.__ball_x_speed = BALL_X_SPEED
+                self.__ball_x_speed = self.__res.scaled_down(BALL_X_SPEED)
                 self.__new_match()
             else:
                 self.__new_match()
@@ -226,15 +231,18 @@ class Game:
         elif (self.__ball["x"] - self.__ball["radius"] >
                 self.__res.get_game_surf_width()):
             self.__left_scores["score"] += 1
+            # Make the ball faster by increasing the absolute value of the speed
+            # Use a percentage-based increase that gets smaller as the score gets higher
+            speed_increase = self.__res.scaled_down(BALL_X_SPEED_VARIATION) * (1 / (1 + self.__left_scores["score"] * 0.1))
             if self.__ball["x_speed"] < 0:
-                self.__ball_x_speed -= BALL_X_SPEED_VARIATION
+                self.__ball_x_speed -= speed_increase
             else:
-                self.__ball_x_speed += BALL_X_SPEED_VARIATION
+                self.__ball_x_speed += speed_increase
             if self.__left_scores["score"] >= 10:
                 self.__left_scores["score"] = 0
                 self.__right_scores["score"] = 0
                 self.__left_scores["match_won"] += 1
-                self.__ball_x_speed = BALL_X_SPEED
+                self.__ball_x_speed = self.__res.scaled_down(BALL_X_SPEED)
                 self.__new_match()
             else:
                 self.__new_match()

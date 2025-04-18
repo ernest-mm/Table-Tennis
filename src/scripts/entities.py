@@ -66,7 +66,7 @@ def draw_paddle(
 
 def ball(
         display_resolution_object: Display_resolution, 
-        x_speed:int = BALL_X_SPEED
+        x_speed:int
     ) -> dict:
     """
     Returns a dictionary containing the ball's x and
@@ -82,7 +82,7 @@ def ball(
         "x": x_position,
         "y": y_position,
         "radius": radius,
-        "x_speed": resolution.scaled_down(x_speed),
+        "x_speed": x_speed,
         "y_speed": 0
     }
 
