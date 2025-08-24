@@ -28,14 +28,14 @@ git clone https://github.com/ernest-mm/Table-Tennis.git
 ```
 or with SSH if you have it configured
 
-### Install the requirements
-```bash
-pip install -r requirements.txt
-```
-
 ### Navigate to the project directory
 ```bash
 cd Table-Tennis
+```
+
+### Install the requirements
+```bash
+pip install -r requirements.txt
 ```
 
 ## Running the game
