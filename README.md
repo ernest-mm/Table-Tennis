@@ -4,11 +4,17 @@
   </h1>
 </div>
 
-***To anyone who might be reading this code:***
+**Table Tennis** is a high resolution Pong clone made with built with Pygame. You can play against a friend, with smooth controls, scalable graphics, and dynamic gameplay. The project also supports multiple screen resolutions.
 
-*This is a Python-based Table Tennis game built with Pygame. 
-While the game is functional, the code is a real mess.
-Your understanding and patience are appreciated.*
+---
+
+**Optional Future Improvements:**
+- Add single-player mode with AI opponent
+- Sound effects and background music
+- Enhanced animations and particle effects
+- In-game settings menu
+
+---
 
 ## Screenshots
 ### Main Menu
@@ -22,17 +28,28 @@ Your understanding and patience are appreciated.*
 ## Installation
 ### Requirements
 - Python 3.12 or higher
-- Pygame-ce 2.5.2 or higher
 - Git
+- Pip
 
-```bash
-# Clone the repository
+
+### Clone the repository
+```bash 
 git clone https://github.com/ernest-mm/Table-Tennis.git
+```
+or with SSH if you have it configured
 
-# Navigate to the project directory
+### Install the requirements
+```bash
+pip install -r requirements.txt
+```
+
+### Navigate to the project directory
+```bash
 cd Table-Tennis
+```
 
 # Run the game
+```bash
 python src/main.py
 ```
 
@@ -57,6 +74,16 @@ python src/main.py
 - **Developer**: [Ernest M.](https://github.com/ernest-mm)
 - **Special Thanks**: 
   - Pygame Community for the excellent documentation and resources
+
+## Future Improvements
+- Add single-player mode with AI opponent
+- Online multiplayer support
+- Sound effects and background music
+- Enhanced animations and particle effects
+- Customizable paddles and themes
+- Improved mobile compatibility
+- In-game settings menu
+- Power-ups and new game modes
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
