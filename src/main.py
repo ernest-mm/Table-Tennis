@@ -19,7 +19,7 @@ class Game:
         self.__res = Display_resolution()
         self.__screen = pygame.display.set_mode(
             self.__res.get_game_surf_size(),
-            pygame.SCALED | pygame.FULLSCREEN | pygame.NOFRAME
+            pygame.SCALED | pygame.NOFRAME
         )
         pygame.display.set_caption("Table Tennis")
         # self.ICON = pygame.image.load("PATH")
