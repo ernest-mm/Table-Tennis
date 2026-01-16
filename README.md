@@ -67,7 +67,7 @@ python src/main.py
 - In-game settings menu
 
 ## Credits
-- **Developer**: [Ernest M.](https://github.com/ernest-mm)
+- **Developer**: [Ernest M. M.](https://github.com/ernest-mm)
 - **Special Thanks**: 
   - Pygame Community for the excellent documentation and resources
 
